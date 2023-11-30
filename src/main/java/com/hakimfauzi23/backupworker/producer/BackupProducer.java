@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileTime;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -41,26 +38,10 @@ public class BackupProducer {
     @Value("${application.backup.scheduler.cron}")
     private String cronExpression;
 
-    private static boolean isToday(FileTime fileTime) {
-        LocalDateTime lastModifiedDateTime = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDate today = LocalDate.now();
-
-        return lastModifiedDateTime.toLocalDate().isEqual(today);
-    }
-
-    private static boolean isYesterday(FileTime fileTime) {
-        LocalDateTime lastModifiedTime = fileTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-
-        return lastModifiedTime.toLocalDate().isEqual(yesterday);
-    }
-
     @Scheduled(cron = "${application.backup.scheduler.cron}")
     public void filesPathProduce() throws IOException {
 
         List<Path> filesList = sftpService.getFilesList(sourceDir);
-        LOGGER.info(String.valueOf(filesList.size()));
-        filesList.forEach(System.out::println);
         if (filesList.size() > 0) {
             for (Path files : filesList) {
                 String strFilePath = String.valueOf(files);
