@@ -1,4 +1,7 @@
 # Back Up Files Spring Boot Apps
+<p align="center">
+  <img src="./flow.gif" alt="App Flow" />
+</p>
 
 ## Overview
 This Spring Boot app helps you back up files from one computer to another using a secure method called SSH. It also makes sure the folders on the second computer match the original ones. You can set when this backup happens by choosing a schedule, like every day or every week. Plus, it's smart – it only picks files that were changed today or yesterday. And, you can easily change when it considers a file "recently changed."
